@@ -35,7 +35,10 @@ function onOpen(e) {
 }
 
 function onMessage(e) {
-    alert('rcvd: ' + e.data);
+    var view = new DataView(e.data);
+    var playerId = view.getUint32(0, true);
+    addCookie(gameIdCookieName, playerId);
+    alert('playerId: ' + playerId);
 }
 
 function spacebarClicked() {
@@ -63,7 +66,7 @@ function sendGameCommunicate(requestCode, keyCode, playerId) {
     var view = new DataView(buffer);
     view.setInt8(0, requestCode);
     view.setInt8(1, keyCode);
-    view.setUint32(2, playerId);
+    view.setUint32(2, playerId, true);
     websocket.send(view);
 }
 
