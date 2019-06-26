@@ -47,13 +47,21 @@ function onMessage(e) {
     var playerId = view.getUint32(0, true);
 
     if (view.byteLength > 4) {
+        clearCanvas();
+
         var self_x = view.getInt32(4, true); 
         var self_y = view.getInt32(8, true);
         var self_score = view.getInt8(12, true); 
 
+        drawRectangle(self_x * 50, self_y * 50, 50, 50, "#f4bf42")
+
         var opponent_x = view.getInt32(18, true);
         var opponent_y = view.getInt32(22, true);
-        var opponent_score = view.getInt8(26, true); 
+        var opponent_score = view.getInt8(26, true);
+
+        drawRectangle(opponent_x * 50, opponent_y * 50, 50, 50, "#0c140c")
+
+        drawScore(self_score, opponent_score);
     }
 
     addCookie(gameIdCookieName, playerId);
@@ -144,6 +152,23 @@ function requestForExistingGame() {
 function getPlayerIdAsUint32() {
     var currentPlayerId = parseInt(getCookie(gameIdCookieName), 10);
     return currentPlayerId >>> 0;
+}
+
+function drawScore(score, opponentScore) {
+    $('#Score').text("Twój wynik: " + score + " Wynik przeciwnika: " + opponentScore);
+}
+
+function drawRectangle(x, y, size_x, size_y, color) {
+    var canvas = document.getElementById("gameCanvas");
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, size_x, size_y);
+}
+
+function clearCanvas() {
+    var canvas = document.getElementById("gameCanvas");
+    const context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 window.addEventListener("load", init, false);

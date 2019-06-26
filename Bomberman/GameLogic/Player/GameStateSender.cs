@@ -40,7 +40,10 @@ namespace Bomberman.GameLogic.Player
             Parallel.ForEach(sockets, s =>
             {
                 var player = GameFactory.Instance.GetPlayerIfExists(s.Key);
-                s.Value.SendAsync(player.GetGameState(), WebSocketMessageType.Binary, true, CancellationToken.None);
+                if (player.Game.IsReady)
+                {
+                    s.Value.SendAsync(player.GetGameState(), WebSocketMessageType.Binary, true, CancellationToken.None);
+                }
             });
         }
     }
