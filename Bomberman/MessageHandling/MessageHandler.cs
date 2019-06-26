@@ -21,41 +21,62 @@ namespace Bomberman.MessageHandling
 
         private byte[] HandleRequestForNewGame()
         {
-            var playerId = PlayerIdProvider.Instance.GetId();
-            return BitConverter.GetBytes(playerId);
+            var player = GameFactory.Instance.ConnectPlayer();
+            return BitConverter.GetBytes(player.ID);
         }
 
         private byte[] HandleRequestForExistingGame(ClientMessage message)
         {
-            return BitConverter.GetBytes(message.PlayerId);
+            var player = GameFactory.Instance.ConnectPlayer(message.PlayerId);
+            return BitConverter.GetBytes(player.ID);
         }
 
         private byte[] HandleGamingRequest(ClientMessage message)
         {
-            return BitConverter.GetBytes(message.PlayerId);
+            switch (message.GameKeyCode)
+            {
+                case MessageConsts.GameKeyCode.KEY_UP_GAME_CODE:
+                    HandleKeyUp(message);
+                    break;
+                case MessageConsts.GameKeyCode.KEY_DOWN_GAME_CODE:
+                    HandleKeyDown(message);
+                    break;
+                case MessageConsts.GameKeyCode.KEY_LEFT_GAME_CODE:
+                    HandleKeyLeft(message);
+                    break;
+                case MessageConsts.GameKeyCode.KEY_RIGHT_GAME_CODE:
+                    HandleKeyRight(message);
+                    break;
+                case MessageConsts.GameKeyCode.KEY_SPACEBAR_GAME_CODE:
+                    HandleKeySpacebar(message);
+                    break;
+                default:
+                    throw new InvalidOperationException("Niepoprawny kod klawisza!");
+            }
+            return null;
         }
 
-        private byte[] HandleKeyUp()
+        private void HandleKeyUp(ClientMessage message)
         {
             throw new NotImplementedException();
         }
 
-        private byte[] HandleKeyDown()
+        private void HandleKeyDown(ClientMessage message)
         {
             throw new NotImplementedException();
         }
 
-        private byte[] HandleKeyLeft()
+        private void HandleKeyLeft(ClientMessage message)
         {
             throw new NotImplementedException();
         }
 
-        private byte[] HandleKeyRight()
+        private void HandleKeyRight(ClientMessage message)
         {
             throw new NotImplementedException();
         }
 
-        private byte[] HandleKeySpacebar()
+        private void HandleKeySpacebar(ClientMessage message)
         {
             throw new NotImplementedException();
         }

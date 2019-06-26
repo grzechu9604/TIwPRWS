@@ -27,7 +27,7 @@ function init() {
 function onOpen(e) {
     gameId = getCookie(gameIdCookieName);
     if (gameId != "") {
-        requestForExistingGame(gameId);
+        requestForExistingGame();
     }
     else {
         requestForNewGame();
@@ -38,7 +38,6 @@ function onMessage(e) {
     var view = new DataView(e.data);
     var playerId = view.getUint32(0, true);
     addCookie(gameIdCookieName, playerId);
-    alert('playerId: ' + playerId);
 }
 
 function spacebarClicked() {
@@ -119,7 +118,7 @@ function requestForNewGame() {
     sendGameCommunicate(REQUEST_FOR_NEW_GAME_CODE, 0, 0);
 }
 
-function requestForExistingGame(gameId) {
+function requestForExistingGame() {
     sendGameCommunicate(REQUEST_FOR_EXISTING_GAME_CODE, 0, getPlayerIdAsUint32());
 }
 

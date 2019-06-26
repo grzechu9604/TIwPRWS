@@ -64,7 +64,10 @@ namespace Bomberman
             while (!result.CloseStatus.HasValue)
             {
                 var message = MessageHandler.Instance.HandleMessage(buffer);
-                await webSocket.SendAsync(message, WebSocketMessageType.Binary, result.EndOfMessage, CancellationToken.None);
+                if (message != null)
+                {
+                    await webSocket.SendAsync(message, WebSocketMessageType.Binary, result.EndOfMessage, CancellationToken.None);
+                }
 
                 result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
             }
