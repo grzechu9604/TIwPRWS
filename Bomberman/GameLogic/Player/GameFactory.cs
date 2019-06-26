@@ -21,7 +21,7 @@ namespace Bomberman.GameLogic.Player
             Player player = null;
             if (playerId.HasValue)
             {
-                player = CheckIfPlayerExists(playerId.Value);
+                player = GetPlayerIfExists(playerId.Value);
                 if (player != null)
                 {
                     return player;
@@ -34,15 +34,15 @@ namespace Bomberman.GameLogic.Player
 
                 if (game != null)
                 {
-                    player = new Player(PlayerIdProvider.Instance.GetId(), 10, 10);
+                    player = new Player(PlayerIdProvider.Instance.GetId(), 10, 10, game);
                     game.SetSecondPlayer(player);
                     Monitor.Pulse(createGameLokc);
                     return player;
                 }
                 else
                 {
-                    player = new Player(PlayerIdProvider.Instance.GetId(), 0, 0);
                     game = new Game();
+                    player = new Player(PlayerIdProvider.Instance.GetId(), 0, 0, game);
                     game.SetFirstPlayer(player);
                     Games.Add(game);
                     Monitor.Wait(createGameLokc);
@@ -51,7 +51,7 @@ namespace Bomberman.GameLogic.Player
             }
         }
 
-        private Player CheckIfPlayerExists(uint playerId)
+        public Player GetPlayerIfExists(uint playerId)
         {
             var game = Games.Find(g => g.FirstPlayer.ID.Equals(playerId) || g.SecondPlayer.ID.Equals(playerId));
             if (game != null)

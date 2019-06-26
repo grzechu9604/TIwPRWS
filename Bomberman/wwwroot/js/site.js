@@ -24,6 +24,14 @@ function init() {
     websocket.onerror = function (e) { onError(e) };
 }
 
+function onError(e) {
+    alert("Błąd połączenia z serwerem!");
+}
+
+function onClose(e) {
+    console.log("Zamknięto WebSocket!");
+}
+
 function onOpen(e) {
     gameId = getCookie(gameIdCookieName);
     if (gameId != "") {

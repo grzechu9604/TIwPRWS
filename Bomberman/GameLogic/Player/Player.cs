@@ -15,15 +15,21 @@ namespace Bomberman.GameLogic.Player
     }
     public class Player
     {
+        public readonly Game Game;
         public readonly uint ID;
         public Direction Direction;
         public Point Coordinates;
+        public byte Score;
+        public DateTime NextShotMinimalTimestamp;
 
-        public Player(uint id, int x, int y)
+        public Player(uint id, int x, int y, Game game)
         {
             ID = id;
             Coordinates = new Point(x, y);
             Direction = Direction.UP;
+            Score = 0;
+            Game = game;
+            NextShotMinimalTimestamp = DateTime.Now;
         }
     }
 }

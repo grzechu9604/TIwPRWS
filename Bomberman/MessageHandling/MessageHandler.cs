@@ -58,27 +58,27 @@ namespace Bomberman.MessageHandling
 
         private void HandleKeyUp(ClientMessage message)
         {
-            throw new NotImplementedException();
+            GameHandler.Instance.HandleDirectionChange(message.PlayerId, Direction.UP);
         }
 
         private void HandleKeyDown(ClientMessage message)
         {
-            throw new NotImplementedException();
+            GameHandler.Instance.HandleDirectionChange(message.PlayerId, Direction.DOWN);
         }
 
         private void HandleKeyLeft(ClientMessage message)
         {
-            throw new NotImplementedException();
+            GameHandler.Instance.HandleDirectionChange(message.PlayerId, Direction.LEFT);
         }
 
         private void HandleKeyRight(ClientMessage message)
         {
-            throw new NotImplementedException();
+            GameHandler.Instance.HandleDirectionChange(message.PlayerId, Direction.RIGHT);
         }
 
         private void HandleKeySpacebar(ClientMessage message)
         {
-            throw new NotImplementedException();
+            GameHandler.Instance.HandleShot(message.PlayerId);
         }
 
         public byte[] HandleMessage(byte[] buffer)
