@@ -82,5 +82,34 @@ namespace Bomberman.GameLogic.Player
                 Coordinates.Y += value;
             }
         }
+
+        public byte[] GetSelfBytes()
+        {
+            var playerIdBytes = BitConverter.GetBytes(ID);
+            var xBytes = BitConverter.GetBytes(Coordinates.X);
+            var yBytes = BitConverter.GetBytes(Coordinates.Y);
+            var scoreBytes = BitConverter.GetBytes(Score);
+            byte[] ret = new byte[playerIdBytes.Length + xBytes.Length + yBytes.Length + scoreBytes.Length];
+            Buffer.BlockCopy(playerIdBytes, 0, ret, 0, playerIdBytes.Length);
+            Buffer.BlockCopy(xBytes, 0, ret, playerIdBytes.Length, xBytes.Length);
+            Buffer.BlockCopy(yBytes, 0, ret, xBytes.Length, yBytes.Length);
+            Buffer.BlockCopy(scoreBytes, 0, ret, yBytes.Length, scoreBytes.Length);
+            return ret;
+        }
+
+        public byte[] GetGameState()
+        {
+            var selfBytes = GetSelfBytes();
+            var secondPlayerBytes = GetSecondPlayer().GetSelfBytes();
+            byte[] ret = new byte[selfBytes.Length + secondPlayerBytes.Length];
+            Buffer.BlockCopy(selfBytes, 0, ret, 0, selfBytes.Length);
+            Buffer.BlockCopy(secondPlayerBytes, 0, ret, selfBytes.Length, secondPlayerBytes.Length);
+            return ret;
+        }
+
+        private Player GetSecondPlayer()
+        {
+            return Game.FirstPlayer.ID.Equals(ID) ? Game.SecondPlayer : Game.FirstPlayer;
+        }
     }
 }

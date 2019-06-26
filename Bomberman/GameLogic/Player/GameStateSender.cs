@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,7 +39,8 @@ namespace Bomberman.GameLogic.Player
         {
             Parallel.ForEach(sockets, s =>
             {
-                s.Value.SendAsync(BitConverter.GetBytes(s.Key), WebSocketMessageType.Binary, true, CancellationToken.None);
+                var player = GameFactory.Instance.GetPlayerIfExists(s.Key);
+                s.Value.SendAsync(player.GetGameState(), WebSocketMessageType.Binary, true, CancellationToken.None);
             });
         }
     }
