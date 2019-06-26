@@ -45,6 +45,17 @@ function onOpen(e) {
 function onMessage(e) {
     var view = new DataView(e.data);
     var playerId = view.getUint32(0, true);
+
+    if (view.byteLength > 4) {
+        var self_x = view.getInt32(4, true); 
+        var self_y = view.getInt32(8, true);
+        var self_score = view.getInt8(12, true); 
+
+        var opponent_x = view.getInt32(18, true);
+        var opponent_y = view.getInt32(22, true);
+        var opponent_score = view.getInt8(26, true); 
+    }
+
     addCookie(gameIdCookieName, playerId);
 }
 

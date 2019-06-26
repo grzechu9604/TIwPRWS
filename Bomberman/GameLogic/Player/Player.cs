@@ -92,8 +92,8 @@ namespace Bomberman.GameLogic.Player
             byte[] ret = new byte[playerIdBytes.Length + xBytes.Length + yBytes.Length + scoreBytes.Length];
             Buffer.BlockCopy(playerIdBytes, 0, ret, 0, playerIdBytes.Length);
             Buffer.BlockCopy(xBytes, 0, ret, playerIdBytes.Length, xBytes.Length);
-            Buffer.BlockCopy(yBytes, 0, ret, xBytes.Length, yBytes.Length);
-            Buffer.BlockCopy(scoreBytes, 0, ret, yBytes.Length, scoreBytes.Length);
+            Buffer.BlockCopy(yBytes, 0, ret, playerIdBytes.Length + xBytes.Length, yBytes.Length);
+            Buffer.BlockCopy(scoreBytes, 0, ret, playerIdBytes.Length + xBytes.Length + yBytes.Length, scoreBytes.Length);
             return ret;
         }
 
