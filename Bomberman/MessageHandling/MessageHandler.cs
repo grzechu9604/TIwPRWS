@@ -19,15 +19,17 @@ namespace Bomberman.MessageHandling
             Instance = new MessageHandler();
         }
 
-        private byte[] HandleRequestForNewGame()
+        private byte[] HandleRequestForNewGame(WebSocket socket)
         {
             var player = GameFactory.Instance.ConnectPlayer();
+            GameStateSender.Instance.AddSocket(player.ID, socket);
             return BitConverter.GetBytes(player.ID);
         }
 
-        private byte[] HandleRequestForExistingGame(ClientMessage message)
+        private byte[] HandleRequestForExistingGame(ClientMessage message, WebSocket socket)
         {
             var player = GameFactory.Instance.ConnectPlayer(message.PlayerId);
+            GameStateSender.Instance.AddSocket(player.ID, socket);
             return BitConverter.GetBytes(player.ID);
         }
 
@@ -81,16 +83,16 @@ namespace Bomberman.MessageHandling
             GameHandler.Instance.HandleShot(message.PlayerId);
         }
 
-        public byte[] HandleMessage(byte[] buffer)
+        public byte[] HandleMessage(byte[] buffer, WebSocket socket)
         {
             ClientMessage message = new ClientMessage(buffer);
 
             switch (message.RequestCode)
             {
                 case MessageConsts.RequestCode.REQUEST_FOR_NEW_GAME_CODE:
-                    return HandleRequestForNewGame();
+                    return HandleRequestForNewGame(socket);
                 case MessageConsts.RequestCode.REQUEST_FOR_EXISTING_GAME_CODE:
-                    return HandleRequestForExistingGame(message);
+                    return HandleRequestForExistingGame(message, socket);
                 case MessageConsts.RequestCode.GAMING_REQUEST_CODE:
                     return HandleGamingRequest(message);
                 default:
