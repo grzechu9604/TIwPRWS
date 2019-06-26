@@ -33,5 +33,7 @@ namespace Bomberman.GameLogic.Player
 
             SecondPlayer = p;
         }
+
+        public bool IsReady => FirstPlayer != null && SecondPlayer != null;
     }
 }

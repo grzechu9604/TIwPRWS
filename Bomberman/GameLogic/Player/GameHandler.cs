@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Bomberman.GameLogic.Player
 {
@@ -10,6 +11,7 @@ namespace Bomberman.GameLogic.Player
         public static GameHandler Instance = new GameHandler();
         private GameHandler()
         {
+            InitTimer();
         }
 
         private readonly List<Game> Games = GameFactory.Instance.Games;
@@ -32,6 +34,29 @@ namespace Bomberman.GameLogic.Player
                 player.Score++;
             }
             player.NextShotMinimalTimestamp = DateTime.Now.AddSeconds(1.0d);
+        }
+
+        private Timer timer;
+        private void InitTimer()
+        {
+            timer = new Timer();
+            timer.Elapsed += Timer_Elapsed;
+            timer.Interval = 500; // in miliseconds
+            timer.Start();
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            ConductGames();
+        }
+
+        private void ConductGames()
+        {
+            Parallel.ForEach(Games.Where(g => g.IsReady), g =>
+            {
+                g.FirstPlayer.DoStep();
+                g.SecondPlayer.DoStep();
+            });
         }
     }
 }

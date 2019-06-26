@@ -34,7 +34,7 @@ namespace Bomberman.GameLogic.Player
 
                 if (game != null)
                 {
-                    player = new Player(PlayerIdProvider.Instance.GetId(), 10, 10, game);
+                    player = new Player(PlayerIdProvider.Instance.GetId(), GameConsts.MaxX, GameConsts.MaxY, game);
                     game.SetSecondPlayer(player);
                     Monitor.Pulse(createGameLokc);
                     return player;
@@ -53,7 +53,8 @@ namespace Bomberman.GameLogic.Player
 
         public Player GetPlayerIfExists(uint playerId)
         {
-            var game = Games.Find(g => g.FirstPlayer.ID.Equals(playerId) || g.SecondPlayer.ID.Equals(playerId));
+            var game = Games.Find(g => (g.FirstPlayer != null && g.FirstPlayer.ID.Equals(playerId)) 
+                                    || (g.SecondPlayer != null && g.SecondPlayer.ID.Equals(playerId)));
             if (game != null)
             {
                 return game.FirstPlayer.ID.Equals(playerId) ? game.FirstPlayer : game.SecondPlayer;
