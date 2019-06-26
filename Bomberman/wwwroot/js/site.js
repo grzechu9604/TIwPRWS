@@ -102,19 +102,19 @@ function fkey(e) {
     switch (e.keyCode) {
         case 38:
             keyUpClicked();
-            break;
+            return false;
         case 40:
             keyDownClicked();
-            break;
+            return false;
         case 39:
             keyRightClicked();
-            break;
+            return false;
         case 37:
             keyLeftClicked();
-            break;
+            return false;
         case 32:
             spacebarClicked();
-            break;
+            return false;
         default:
     }
 }
